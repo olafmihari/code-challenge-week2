@@ -1,8 +1,10 @@
-setPage();
+setPage(); 
+
 
 function setPage() {
-    getAnimalsNames();
+    getAnimalNames(); 
 }
+
 // function to show details of animal upon being clicking
 function toggleAnimalDescription() {
     let description = document.querySelectorAll('.description');
@@ -42,6 +44,7 @@ function submitVoteBtn() {
     })
 }
 
+
 function addVote(id, number) {
     fetch(`http://localhost:3000/characters/${id}`, {
         method: 'PATCH',
@@ -61,14 +64,15 @@ function addVote(id, number) {
         .catch(err => console.log(err.message));
 }
 
-async function getAnimalsNames() {
-    const animalsNames = document.querySelector('.animalsNames');
+
+async function getAnimalNames() {
+    const animalNames = document.querySelector('.animalNames');
     let output = '';
 
     await fetch('http://localhost:3000/characters')
         .then(res => res.json())
         .then(res => {
-            res.forEach(element => {
+            res.forEach(element => { // For each "span" element, check if the index matches the button index. If it does, update the vote count and send the vote to the database
                 output += ` <div class="singleAnimal">
                 <p class="title">${element.name}</p>
                 <div class="description">
@@ -79,10 +83,20 @@ async function getAnimalsNames() {
                 </div>`
             });
 
-            animalsNames.innerHTML = output;
+            animalNames.innerHTML = output;
         })
         .catch(err => console.log(err.message));
-
+    
     toggleAnimalDescription();
     submitVoteBtn();
 }
+
+
+const resetButton = document.getElementById('resetButton');
+
+resetButton.addEventListener('click', () => {
+  const votesCount = document.querySelectorAll('.description p span');
+  votesCount.forEach((element) => {
+    element.textContent = '0';
+  });
+});
